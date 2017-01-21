@@ -1,0 +1,19 @@
+<ion-view view-title = "login">
+  <div class="bar bar-subheader bar-dark">
+    <h1 class="title">Login</h1>
+ </div>
+ <div class="content has-subheader">
+    <form name = "login-form">
+      Email: <br>
+      <label class = "item item-input">
+        <input type = "email" name = "email" ng-model = "email"><br>
+      </label>
+      Password:
+      <label class="item item-input">
+        <input type = "password" name = "password" ng-model = "password">
+      </label>
+      <input type = "button" class="button button-block button-positive" value = "Login" ng-click="login(email,password)">
+      <a class="button button-block button-positive" href="#/signUp">Sign Up</a>
+    </form>
+  </div>
+</ion-view>
