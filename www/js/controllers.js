@@ -1,14 +1,17 @@
 angular.module('kanplan.controllers', [])
 
 // Loging control //UserSession?
-.controller('LoginCtrl', function($scope, $http, $state ){
+.controller('LoginCtrl', function($scope, $http, $state, $stateParams){
   $scope.email;
   $scope.password;
 
-  $scope.login = function(email,password){
+  $scope.error;
+
+  $scope.login = function(email,password, userId){
     var user = {
       email: email,
-      password:password
+      password:password,
+      userId: userId
     };
     _httpPostLogin(user)
   }
@@ -22,13 +25,28 @@ angular.module('kanplan.controllers', [])
       },
       data : {
         email : user.email,
-        password : user.password
+        password : user.password,
+        userId: user.userId // use user idea in a session variable for later requests
       }
     };
 
     $http(request).then(
-        function(){
-            console.log("Posted to user/login");
+        function(res, err){
+           
+            if(res.status === 200){
+                $state.go('dashboard');
+            } 
+            // TODO impliment some error handeling
+           //console.log(res);
+            /*if(err){
+                // figure out best way to error handle
+                $scope.error = $stateParams.error;
+                $state.go('login', {error:true});
+                console.log("this is err: " + err);
+            } else {
+                $state.go('dashboard');
+            } */
+
         }
     );
       /*function(res){
@@ -56,10 +74,6 @@ angular.module('kanplan.controllers', [])
     $scope.user.name = name;
     $scope.user.email = email;
     $scope.user.password = password;
-
-    console.log("username: " + name);
-    console.log("email: " + email);
-    console.log("password: " + password);
     _httpPostSignUp();
   }
 
@@ -78,8 +92,14 @@ angular.module('kanplan.controllers', [])
    };
 
    $http(request).then(
-       function(){
-           console.log("Post request to /user/signup complete");
+       function(res ){
+           if(res.status === 200){
+               // if request is returned from server, then go to dashboard
+               console.log("Post to user/signup");
+                $state.go('dashboard');
+           }
+           
+          
        }
    );
      /*function(res){

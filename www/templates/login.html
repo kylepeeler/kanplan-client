@@ -3,6 +3,9 @@
     <h1 class="title">Login</h1>
  </div>
  <div class="content has-subheader">
+      <div ng-if="$scopeParams.error">
+     <p>This is the error!</p>
+ </div>
     <form name = "login-form">
       Email: <br>
       <label class = "item item-input">
