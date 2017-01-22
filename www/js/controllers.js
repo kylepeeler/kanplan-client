@@ -1,7 +1,7 @@
 angular.module('kanplan.controllers', [])
 
 // Logging control //UserSession?
-.controller('LoginCtrl', function($scope, $http, $state, $ionicSideMenuDelegate){
+.controller('LoginCtrl', function($scope, $http, $state, $stateParams, $ionicSideMenuDelegate){
   $scope.email = "";
   $scope.password = "";
 
@@ -38,7 +38,7 @@ angular.module('kanplan.controllers', [])
     };
 
     $http(request).then(
-        function(res, err){
+        function(successCallback, errorCallback){
 
             if(successCallback.status === 200){
                 $state.go('dashboard');
