@@ -1,12 +1,12 @@
-<div class="card" ng-contoller="TaskCtrl">
-    <!-- The title will be in the header of the card --> 
+<div class="card" ng-controller="TaskCtrl">
+    <!-- The title will be in the header of the card -->
     <div class="item item-divider">
         <h3>{{task.title}}</h3>
     </div>
 
     <!-- the description is word wrapped -->
     <div class="item item-text-wrap">{{task.description}}</div>
-   
+
     <p>${{task.compensation}} per hour</p>
 
     <!-- Buttons to perform Delete and Submit operations -->
@@ -21,5 +21,5 @@
         Complete
         </ion-option-button>
     </div>
-    
+
 </div>
