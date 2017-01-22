@@ -1,10 +1,12 @@
 angular.module('kanplan.controllers', [])
 
 // Logging control //UserSession?
-  .controller('LoginCtrl', function ($scope, $http, $state, $stateParams, $ionicSideMenuDelegate, UserID) {
+  .controller('LoginCtrl', function ($scope, $http, $state, $stateParams, $ionicSideMenuDelegate,$rootScope, UserID, CurrentOrgId) {
     $scope.email = "";
     $scope.password = "";
     $scope.error = "";
+    var firstOrg;
+//    $scope.firstOrg;
 
     //disable side menu on login page
     $ionicSideMenuDelegate.canDragContent(false);
@@ -22,6 +24,26 @@ angular.module('kanplan.controllers', [])
       _httpPostLogin(user)
     };
 
+    getFirstUserOrg();
+
+
+    function getFirstUserOrg(){
+      var request = {
+        method: "GET",
+        url: "http://52.14.22.20:3000/user/" + UserID.get()
+      };
+      $http(request).then(
+        function(successCallback, errorCallback){
+          if (successCallback.status === 200){
+            CurrentOrgId.set(successCallback.data.orgs[0]);
+            $rootScope.firstorg = successCallback.data.orgs[0];
+          }
+        }
+      )
+    };
+
+
+
     function _httpPostLogin(user) {
       var request = {
         method: "POST",
@@ -37,13 +59,17 @@ angular.module('kanplan.controllers', [])
 
       $http(request).then(
         function (successCallback, errorCallback) {
-          console.log('success:');
-          console.dir(successCallback);
-          console.log('error:');
-          console.dir(errorCallback);
+          //console.log('success:');
+          //console.dir(successCallback);
+          //console.log('error:');
+          //console.dir(errorCallback);
+
+
           if (successCallback.status === 200) {
             UserID.set(successCallback.data._id);
-            $state.go('dashboard');
+            //console.log(getFirstUserOrg(UserID.get()));
+            console.log("first org " + $rootScope.firstorg);
+            $state.go('dashboard',{orgid:  $rootScope.firstorg} );
           }
 
           // TODO impliment some error handling
@@ -116,13 +142,30 @@ angular.module('kanplan.controllers', [])
       );
     }
   })
-  .controller('DashboardCtrl', function ($scope, $ionicPopup, $state, $stateParams, $ionicSideMenuDelegate, Tasks) {
+  .controller('DashboardCtrl', function ($scope, $ionicPopup, $state, $stateParams, $rootScope, $ionicSideMenuDelegate, Tasks, CurrentOrgId) {
     //Enable side menu
     $ionicSideMenuDelegate.canDragContent(true);
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
-    console.log(Tasks.get('SJJDsU-wg','Open'));
+    //set the org id to scope from url param
+    //console.log("orgid: " + $stateParams.orgid);
+
+
+    console.log("ASSIGNED TASKS = ");
+    console.dir( Tasks.get($rootScope.firstorg, "Assigned"));
+
+
+
+    $scope.openTasks = Tasks.get($scope.orgid, "Open");
+    $scope.assignedTasks = Tasks.get($scope.orgid, "Assigned");
+    $scope.pendingTasks = Tasks.get($scope.orgid, "Pending");
+    $scope.closedTasks = Tasks.get($scope.orgid, "Closed");
+
+
+
+
+    //console.log(Tasks.get('SJJDsU-wg','Open'));
 
     // get the tasks from the backend based on the :orgId
     //$stateProvider.state('org.task',{
@@ -148,10 +191,34 @@ angular.module('kanplan.controllers', [])
       ]
     });
   })// Task template factory
-.controller('TaskCtrl', function ($scope, Tasks) {
-    
+
+
+
+.controller('CreatedTaskCtrl', function ($scope,$stateParams, Tasks, CurrentOrgId) {
+
+  console.log("loading created tasks using org id: " + CurrentOrgId.get());
+
+  $scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
 })
-.directive('task', function () {
+  .controller('AssignedTaskCtrl', function ($scope, Tasks, CurrentOrgId) {
+    $scope.tasks = Tasks.get(CurrentOrgId.get(), "Assigned");
+
+  })
+
+  .controller('PendingTaskCtrl', function ($scope, Tasks, CurrentOrgId) {
+    $scope.tasks = Tasks.get(CurrentOrgId.get(), "Pending");
+
+  })
+
+  .controller('ClosedTaskCtrl', function ($scope, Tasks, CurrentOrgId) {
+    $scope.tasks = Tasks.get(CurrentOrgId.get(), "Closed");
+
+  })
+
+
+
+
+  .directive('task', function () {
     return { // custom DOM element for tast
       templateUrl: 'templates/task.html'
     };

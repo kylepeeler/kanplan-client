@@ -17,6 +17,20 @@ angular.module('kanplan.services', [])
       }
     };
   })
+  .factory('CurrentOrgId', function($window) {
+    var CurrentOrgId = $window.localStorage['orgid'];
+    return {
+      get: function(){
+        if (!CurrentOrgId){
+          return null;
+        }else return CurrentOrgId;
+      },
+      set: function(id){
+        CurrentOrgId = id;
+        $window.localStorage['orgid'] = id;
+      }
+    };
+  })
   .factory('Tasks', function($http, $rootScope){
       var self = $rootScope;
     return {
@@ -30,8 +44,8 @@ angular.module('kanplan.services', [])
             function(res){
                 if(res.status === 200){
                     console.log("tasks loaded");
-                    console.log(res);
-                    return res;
+                    console.log(res.data);
+                    return res.data;
                 }else{
                     console.log("could not load tasks");
                     return null;
