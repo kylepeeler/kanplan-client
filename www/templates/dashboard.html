@@ -12,11 +12,11 @@
               Open
             </div>
           </div>
-          <!--<div ng-controller="CreatedTaskCtrl">-->
-            <div ng-repeat="task in openTasks">
+          <div ng-controller="CreatedTaskCtrl">
+            <div ng-repeat="task in tasks">
               <div task></div>
             </div>
-          <!--</div>-->
+          </div>
         </div>
         <div class="col">
           <div class="card card-cat">
@@ -26,11 +26,11 @@
           </div>
 
 
-          <!--<div ng-controller="AssignedTaskCtrl">-->
+          <div ng-controller="AssignedTaskCtrl">
             <div ng-repeat="task in tasks">
               <div task></div>
             </div>
-          <!--</div>-->
+          </div> 
 
         </div>
         <div class="col">
@@ -39,6 +39,7 @@
               Pending
             </div>
           </div>
+          
           <div ng-controller="PendingTaskCtrl">
             <div ng-repeat="task in tasks">
               <div task></div>

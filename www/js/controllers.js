@@ -69,6 +69,7 @@ angular.module('kanplan.controllers', [])
             UserID.set(successCallback.data._id);
             //console.log(getFirstUserOrg(UserID.get()));
             console.log("first org " + $rootScope.firstorg);
+            CurrentOrgId.set($rootScope.firstorg);
             $state.go('dashboard',{orgid:  $rootScope.firstorg} );
           }
 
@@ -144,6 +145,9 @@ angular.module('kanplan.controllers', [])
   })
   .controller('DashboardCtrl', function ($scope, $ionicPopup, $state, $stateParams, $rootScope, $ionicSideMenuDelegate, Tasks, CurrentOrgId) {
     //Enable side menu
+    $scope.orgid = {};
+    $scope.orgid = CurrentOrgId.get();
+    console.log("Current Org Id from factory: " + CurrentOrgId.get());
     $ionicSideMenuDelegate.canDragContent(true);
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
@@ -157,10 +161,10 @@ angular.module('kanplan.controllers', [])
 
 
 
-    $scope.openTasks = Tasks.get($scope.orgid, "Open");
-    $scope.assignedTasks = Tasks.get($scope.orgid, "Assigned");
-    $scope.pendingTasks = Tasks.get($scope.orgid, "Pending");
-    $scope.closedTasks = Tasks.get($scope.orgid, "Closed");
+    $scope.openTasks = Tasks.get("SJJDsU-wg", "Open");
+    $scope.assignedTasks = Tasks.get("SJJDsU-wg", "Assigned");
+    $scope.pendingTasks = Tasks.get("SJJDsU-wg", "Pending");
+    $scope.closedTasks = Tasks.get("SJJDsU-wg", "Closed");
 
 
 
@@ -194,26 +198,76 @@ angular.module('kanplan.controllers', [])
 
 
 
-.controller('CreatedTaskCtrl', function ($scope,$stateParams, Tasks, CurrentOrgId) {
+.controller('CreatedTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
 
-  console.log("loading created tasks using org id: " + CurrentOrgId.get());
+  var createdTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Open" 
+  }
+  $http(createdTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
 
-  $scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
 })
-  .controller('AssignedTaskCtrl', function ($scope, Tasks, CurrentOrgId) {
-    $scope.tasks = Tasks.get(CurrentOrgId.get(), "Assigned");
+.controller('AssignedTaskCtrl',  function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
 
-  })
+  var assignedTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Assigned" 
+  }
+  $http(assignedTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
 
-  .controller('PendingTaskCtrl', function ($scope, Tasks, CurrentOrgId) {
-    $scope.tasks = Tasks.get(CurrentOrgId.get(), "Pending");
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
 
-  })
+.controller('PendingTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
 
-  .controller('ClosedTaskCtrl', function ($scope, Tasks, CurrentOrgId) {
-    $scope.tasks = Tasks.get(CurrentOrgId.get(), "Closed");
+  var pendingTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Pending" 
+  }
+  $http(pendingTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
 
-  })
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
+
+  .controller('ClosedTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+
+  var closedTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Closed" 
+  }
+  $http(closedTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
+
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
 
 
 

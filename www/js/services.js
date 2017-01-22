@@ -45,7 +45,7 @@ angular.module('kanplan.services', [])
                 if(res.status === 200){
                     console.log("tasks loaded");
                     console.log(res.data);
-                    return res.data;
+                   self.data = res.data;
                 }else{
                     console.log("could not load tasks");
                     return null;
