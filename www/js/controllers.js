@@ -247,12 +247,30 @@ angular.module('kanplan.controllers', [])
 
 
 })
-.controller('AssignedTaskCtrl',  function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+.controller('AssignedTaskCtrl',  function ($scope,$stateParams, $ionicModal, $http, Tasks, CurrentOrgId) {
+
+   $ionicModal.fromTemplateUrl('templates/PendingTask.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+        }).then(function (modal) {
+          $scope.modal = modal;
+        });
+
+    $scope.openComplete = function (id) {
+      console.log("should open");
+       $scope.modal.show();
+    };
+
+
+    $scope.submitTask = function(taskId, notes){
+        $scope.modal.hide();
+
+    }
 
   var assignedTaskQuery = {
     method: "get",
     url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Assigned"
-  }
+  };
   $http(assignedTaskQuery).then(
     function(res){
       if(res.status === 200){
@@ -260,6 +278,9 @@ angular.module('kanplan.controllers', [])
       }
     }
   );
+
+
+  
 
   console.log(Tasks.get(CurrentOrgId.get(), "Created"));
 
@@ -330,6 +351,9 @@ angular.module('kanplan.controllers', [])
       }
     }
   );
+
+   
+
 
   console.log(Tasks.get(CurrentOrgId.get(), "Created"));
   //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
