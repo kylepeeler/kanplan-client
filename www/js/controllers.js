@@ -201,7 +201,7 @@ angular.module('kanplan.controllers', [])
 
   var createdTaskQuery = {
     method: "get",
-    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Open" 
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Open"
   }
   $http(createdTaskQuery).then(
     function(res){
@@ -218,7 +218,7 @@ angular.module('kanplan.controllers', [])
 
   var assignedTaskQuery = {
     method: "get",
-    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Assigned" 
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Assigned"
   }
   $http(assignedTaskQuery).then(
     function(res){
@@ -236,7 +236,7 @@ angular.module('kanplan.controllers', [])
 
   var pendingTaskQuery = {
     method: "get",
-    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Pending" 
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Pending"
   }
   $http(pendingTaskQuery).then(
     function(res){
@@ -254,7 +254,7 @@ angular.module('kanplan.controllers', [])
 
   var closedTaskQuery = {
     method: "get",
-    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Closed" 
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Closed"
   }
   $http(closedTaskQuery).then(
     function(res){
@@ -304,7 +304,7 @@ angular.module('kanplan.controllers', [])
         $scope.modal.show();
       };
 
-     
+
 
 
     function _httpPostTask(task, orgId) {
