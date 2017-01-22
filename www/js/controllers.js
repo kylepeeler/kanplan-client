@@ -166,7 +166,7 @@ angular.module('kanplan.controllers', [])
 
  // New Task template controller
 .controller('NewTaskCtrl', function($scope, $ionicModal, UserID){
-    //
+    // TODO, finish the POST request to create a new task
     $scope.task = {
         title: "",
         description: "",
@@ -185,7 +185,7 @@ angular.module('kanplan.controllers', [])
   }
 
 
-$ionicModal.fromTemplateUrl('templates/new.task.html', {
+  $ionicModal.fromTemplateUrl('templates/new.task.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal){
@@ -221,9 +221,82 @@ $ionicModal.fromTemplateUrl('templates/new.task.html', {
   });
 
 
-function _httpPostTask(task, orgId){
+  function _httpPostTask(task, orgId){
     var request = {
         method : "POST",
+        url: "http://52.14.22.20:3000/tasks/" + orgId,
+        headers : {
+            'content-type' : 'application/json'
+            },
+        data : {
+            title: $scope.task.title,
+            description: $scope.task.description,
+            compensation: $scope.task.compensation,
+            asignee: $scope.task.asignee,
+            userId: $scope.task.author
+        }
+    };
+
+        $http(request).then(
+            function(res ){
+                if(res.status === 200){
+                    // if request is returned from server, then go to dashboard
+                    console.log("Post to user/signup");
+                       // $state.go('dashboard');
+                       //close modal
+                }
+            }
+        );
+    }
+})
+.controller('InvoiceCtrl', function($scope, $ionicModal, UserID){
+    
+    // TODO impilment GET request and populate list view will all the current invoices
+
+  $scope.getInvoices = function( ){
+ /*$scope.task.title = title;
+    $scope.task.description = description;
+    $scope.task.compensation = compensation;
+    $scope.task.asignee = asignee; */
+    console.log("query invoices");
+    //_httpPostTask(task);
+     $scope.modal.show();
+  }
+
+
+  $ionicModal.fromTemplateUrl('templates/invoices.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal){
+    $scope.modal = modal;
+  });
+
+
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.createTask = function(title, description, compensation, asignee){
+
+    var invoice = {
+     
+    }
+
+    _httpGetInvoices(invoices);
+      console.log("create task");
+      //$scope.modal.hide();
+  }
+
+  // Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+
+  function _httpGetInvoices(task, orgId){
+    var request = {
+        method : "GET",
         url: "http://52.14.22.20:3000/tasks/" + orgId,
         headers : {
             'content-type' : 'application/json'
