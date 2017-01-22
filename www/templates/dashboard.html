@@ -1,68 +1,68 @@
-<ion-view view-title = "Kanplan Dashboard" can-swipe-back="false">
+<ion-view view-title="Kanplan Dashboard" can-swipe-back="false">
   <div class="bar bar-header bar-calm">
     <button class="button button-icon icon ion-navicon" ng-click="toggleLeft()"></button>
     <div class="h1 title">Kanplan Dashboard</div>
   </div>
   <ion-content>
     <ion-scroll direction="x" class="wide-as-needed">
-  <div class="row">
-    <div class="col">
-      <div class="card card-cat">
-        <div class="item item-divider" >
-          Created
+      <div class="row">
+        <div class="col">
+          <div class="card card-cat">
+            <div class="item item-divider">
+              Open
+            </div>
+          </div>
+          <div ng-controller="CreatedTaskCtrl">
+            <div ng-repeat="task in tasks">
+              <div task></div>
+            </div>
+          </div>
         </div>
-      </div>
-     <!-- <div class="card">
-        <div class="item item-text-wrap">
-          This is a basic Card which contains an item that has wrapping text.
-        </div>
-      </div> -->
+        <div class="col">
+          <div class="card card-cat">
+            <div class="item item-divider">
+              Assigned
+            </div>
+          </div>
 
-      <div ng-controller="NewTaskCtrl">
-        <div ng-repeat="task in tasks">
-            <div task></div>
-        </div>
 
-      </div>
+          <div ng-controller="AssignedTaskCtrl">
+            <div ng-repeat="task in tasks">
+              <div task></div>
+            </div>
+          </div> 
 
-    </div>
-    <div class="col">
-      <div class="card card-cat">
-        <div class="item item-divider" >
-          Assigned
+        </div>
+        <div class="col">
+          <div class="card card-cat">
+            <div class="item item-divider">
+              Pending
+            </div>
+          </div>
+          
+          <div ng-controller="PendingTaskCtrl">
+            <div ng-repeat="task in tasks">
+              <div task></div>
+            </div>
+          </div>
+
+
+
+        </div>
+        <div class="col">
+          <div class="card card-cat">
+            <div class="item item-divider">
+              Closed
+            </div>
+          </div>
+
+            <div ng-controller="ClosedTaskCtrl">
+              <div ng-repeat="task in tasks">
+                <div task></div>
+              </div>
+            </div>
         </div>
       </div>
-      <div class="card">
-        <div class="item item-text-wrap">
-          This is a basic Card which contains an item that has wrapping text.
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card card-cat">
-        <div class="item item-divider" >
-          Opened
-        </div>
-      </div>
-      <div class="card">
-        <div class="item item-text-wrap">
-          This is a basic Card which contains an item that has wrapping text.
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card card-cat">
-        <div class="item item-divider" >
-          Closed
-        </div>
-      </div>
-      <div class="card">
-        <div class="item item-text-wrap">
-          This is a basic Card which contains an item that has wrapping text.
-        </div>
-      </div>
-    </div>
-  </div>
     </ion-scroll>
   </ion-content>
 </ion-view>

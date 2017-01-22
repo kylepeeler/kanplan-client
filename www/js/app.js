@@ -18,7 +18,7 @@ angular.module('kanplan', ['ionic', 'kanplan.controllers', 'kanplan.services'])
     controller: 'SignUpCtrl'
   })
   .state('dashboard', {
-    url:'/dashboard',
+    url:'/dashboard/:orgid',
     templateUrl:'templates/dashboard.html',
     controller: 'DashboardCtrl'
   })

@@ -1,10 +1,12 @@
 angular.module('kanplan.controllers', [])
 
 // Logging control //UserSession?
-  .controller('LoginCtrl', function ($scope, $http, $state, $stateParams, $ionicSideMenuDelegate, UserID) {
+  .controller('LoginCtrl', function ($scope, $http, $state, $stateParams, $ionicSideMenuDelegate,$rootScope, UserID, CurrentOrgId) {
     $scope.email = "";
     $scope.password = "";
     $scope.error = "";
+    var firstOrg;
+//    $scope.firstOrg;
 
     //disable side menu on login page
     $ionicSideMenuDelegate.canDragContent(false);
@@ -22,6 +24,26 @@ angular.module('kanplan.controllers', [])
       _httpPostLogin(user)
     };
 
+    getFirstUserOrg();
+
+
+    function getFirstUserOrg(){
+      var request = {
+        method: "GET",
+        url: "http://52.14.22.20:3000/user/" + UserID.get()
+      };
+      $http(request).then(
+        function(successCallback, errorCallback){
+          if (successCallback.status === 200){
+            CurrentOrgId.set(successCallback.data.orgs[0]);
+            $rootScope.firstorg = successCallback.data.orgs[0];
+          }
+        }
+      )
+    };
+
+
+
     function _httpPostLogin(user) {
       var request = {
         method: "POST",
@@ -37,13 +59,18 @@ angular.module('kanplan.controllers', [])
 
       $http(request).then(
         function (successCallback, errorCallback) {
-          console.log('success:');
-          console.dir(successCallback);
-          console.log('error:');
-          console.dir(errorCallback);
+          //console.log('success:');
+          //console.dir(successCallback);
+          //console.log('error:');
+          //console.dir(errorCallback);
+
+
           if (successCallback.status === 200) {
             UserID.set(successCallback.data._id);
-            $state.go('dashboard');
+            //console.log(getFirstUserOrg(UserID.get()));
+            console.log("first org " + $rootScope.firstorg);
+            CurrentOrgId.set($rootScope.firstorg);
+            $state.go('dashboard',{orgid:  $rootScope.firstorg} );
           }
 
           // TODO impliment some error handling
@@ -116,12 +143,33 @@ angular.module('kanplan.controllers', [])
       );
     }
   })
-  .controller('DashboardCtrl', function ($scope, $ionicPopup, $state, $stateParams, $ionicSideMenuDelegate, Tasks) {
+  .controller('DashboardCtrl', function ($scope, $ionicPopup, $state, $stateParams, $rootScope, $ionicSideMenuDelegate, Tasks, CurrentOrgId) {
     //Enable side menu
+    $scope.orgid = {};
+    $scope.orgid = CurrentOrgId.get();
+    console.log("Current Org Id from factory: " + CurrentOrgId.get());
     $ionicSideMenuDelegate.canDragContent(true);
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
+    //set the org id to scope from url param
+    //console.log("orgid: " + $stateParams.orgid);
+
+
+    console.log("ASSIGNED TASKS = ");
+    console.dir( Tasks.get($rootScope.firstorg, "Assigned"));
+
+
+
+    $scope.openTasks = Tasks.get("SJJDsU-wg", "Open");
+    $scope.assignedTasks = Tasks.get("SJJDsU-wg", "Assigned");
+    $scope.pendingTasks = Tasks.get("SJJDsU-wg", "Pending");
+    $scope.closedTasks = Tasks.get("SJJDsU-wg", "Closed");
+
+
+
+
+    //console.log(Tasks.get('SJJDsU-wg','Open'));
 
     // get the tasks from the backend based on the :orgId
     //$stateProvider.state('org.task',{
@@ -148,13 +196,89 @@ angular.module('kanplan.controllers', [])
     });
   })// Task template factory
 
+
+
+.controller('CreatedTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+
+  var createdTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Open" 
+  }
+  $http(createdTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
+
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
+.controller('AssignedTaskCtrl',  function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+
+  var assignedTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Assigned" 
+  }
+  $http(assignedTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
+
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
+
+.controller('PendingTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+
+  var pendingTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Pending" 
+  }
+  $http(pendingTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
+
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
+
+  .controller('ClosedTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+
+  var closedTaskQuery = {
+    method: "get",
+    url: "http://52.14.22.20:3000/tasks/" + CurrentOrgId.get() + "?state=Closed" 
+  }
+  $http(closedTaskQuery).then(
+    function(res){
+      if(res.status === 200){
+        $scope.tasks = res.data;
+      }
+    }
+  );
+
+  console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+  //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+})
+
+
+
+
   .directive('task', function () {
     return { // custom DOM element for tast
       templateUrl: 'templates/task.html'
     };
   })
   // New Task template controller
-  .controller('NewTaskCtrl', function ($scope, $ionicModal, UserID) {
+.controller('NewTaskCtrl', function ($scope, $ionicModal, UserID) {
     // TODO, finish the POST request to create a new task
     $scope.task = {
       title: "",
