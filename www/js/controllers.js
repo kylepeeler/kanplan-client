@@ -1,25 +1,24 @@
 angular.module('kanplan.controllers', [])
 
 // Logging control //UserSession?
-.controller('LoginCtrl', function($scope, $http, $state, $stateParams, $ionicSideMenuDelegate){
+.controller('LoginCtrl', function($scope, $http, $state, $stateParams, $ionicSideMenuDelegate, UserID){
   $scope.email = "";
   $scope.password = "";
-
   $scope.error = "";
 
   //disable side menu on login page
   $ionicSideMenuDelegate.canDragContent(false);
   //enable side menu drag before moving to next view
-  $scope.$on('$ionicView.beforeLeave', function(event) {
-    $ionicSideMenuDelegate.canDragContent(true);
-  });
+  // $scope.$on('$ionicView.beforeLeave', function(event) {
+  //   $ionicSideMenuDelegate.canDragContent(true);
+  // });
 
-  $scope.login = function(email,password, userId){
+  $scope.login = function(email,password){
     var user = {
       email: email,
-      password:password,
-      userId: userId
+      password:password
     };
+    UserID.set(user.userId);
     _httpPostLogin(user)
   };
 
@@ -32,16 +31,19 @@ angular.module('kanplan.controllers', [])
       },
       data : {
         email : user.email,
-        password : user.password,
-        userId: user.userId // use user idea in a session variable for later requests
+        password : user.password
       }
     };
 
     $http(request).then(
         function(successCallback, errorCallback){
-
+            console.log('success:');
+            console.dir(successCallback);
+            console.log('error:');
+            console.dir(errorCallback);
             if(successCallback.status === 200){
-                $state.go('dashboard');
+              UserID.set(successCallback.data._id);
+              $state.go('dashboard');
             }
 
             // TODO impliment some error handling
@@ -104,7 +106,7 @@ angular.module('kanplan.controllers', [])
    };
 
    $http(request).then(
-       function(res ){
+       function(res){
            if(res.status === 200){
                // if request is returned from server, then go to dashboard
                console.log("Post to user/signup");
@@ -124,8 +126,11 @@ angular.module('kanplan.controllers', [])
   }
  })
 
- .controller('DashboardCtrl', function($scope, $ionicPopup, $state,  $ionicSideMenuDelegate){
-    //Enable side menu
+ .controller('DashboardCtrl', function($scope, $ionicPopup, $state,  $ionicSideMenuDelegate, UserID){
+
+   console.log("user id is " + UserID.get());
+
+   //Enable side menu
    $ionicSideMenuDelegate.canDragContent(true);
    $scope.toggleLeft = function() {
      $ionicSideMenuDelegate.toggleLeft();
@@ -223,6 +228,51 @@ angular.module('kanplan.controllers', [])
             }
         );
     }
-});
+})
+  .controller('JoinOrgCtrl', function($scope, $http, $ionicHistory, UserID){
+    $scope.orgtojoin = {};
+    var orgsReq = {
+      method: "GET",
+      url: "http://52.14.22.20:3000/organization"
+    };
+
+    $http(orgsReq).then(
+      function(res){
+        if (res.status === 200){
+          console.log("Organizations loaded");
+          console.log(res);
+          $scope.orgs = res.data;
+        }else{
+          console.log("Could not load organizations");
+        }
+      }
+    );
+
+    $scope.joinOrg = function(){
+      var joinOrgReq = {
+        method: "POST",
+        url: "http://52.14.22.20:3000/organization/join",
+        data : {
+          role : "client",
+          userId : UserID.get(),
+          orgId : $scope.orgtojoin.id
+        }
+      };
+      $http(joinOrgReq).then(
+        function(res){
+          if (res.status === 200){
+            console.log("organization joined successfully: " + $scope.orgtojoin.id + "result:");
+            console.log(res);
+          }else{
+            console.log("could not join organization");
+          }
+        }
+      );
+    };
+
+    $scope.goBack = function(){
+      $ionicHistory.goBack();
+    }
+  });
 
 
