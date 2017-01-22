@@ -20,7 +20,7 @@
                   {{task.description}}
                   {{task.compensation}}
                   <br>
-                  <a class="button button-small button-block button-royal" ng-click="submitTask(taskId)">
+                  <a class="button button-small button-block button-royal" ng-click="takeTask(task._id)">
                     Take
                   </a>
                 </div>
@@ -43,9 +43,9 @@
               {{task.description}}
               {{task.compensation}}
               <div class="button-bar">
-                <a class="button button-block  input-button button-balanced"  ng-click="timerStart()">Start</a>
-                <a class="button button-block  input-button button-assertive" ng-click="timerStop()">Stop</a>
-                <a class="button button-block input-button button-royal" ng-click="submitTask(taskId)">
+                <a class="button button-block  input-button button-balanced"  ng-click="taskStart(task._id)" ng-disabled="this.started">Start</a>
+                <a class="button button-block  input-button button-assertive" ng-click="taskStop(task._id)" ng-disabled="this.stopped">Stop</a>
+                <a class="button button-block input-button button-royal" ng-click="taskComplete(taskId)">
                   Complete
                 </a>
               </div>

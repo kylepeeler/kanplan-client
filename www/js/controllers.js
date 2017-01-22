@@ -213,6 +213,24 @@ angular.module('kanplan.controllers', [])
 
   console.log(Tasks.get(CurrentOrgId.get(), "Created"));
   //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
+
+  $scope.takeTask = function(id){
+    alert(id);
+    var takeTaskQuery = {
+      method: "put",
+      url: "http://52.14.22.20:3000/task/" + id
+    }
+    $http(takeTaskQuery).then(
+      function(res){
+        if (res.status === 200){
+          //alert("task taken successfully");
+          location.reload();
+        }
+      }
+    )
+  };
+
+
 })
 .controller('AssignedTaskCtrl',  function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
 
@@ -229,6 +247,40 @@ angular.module('kanplan.controllers', [])
   );
 
   console.log(Tasks.get(CurrentOrgId.get(), "Created"));
+
+  $scope.taskStart = function(id){
+    //alert(id);
+    var takeTaskQuery = {
+      method: "post",
+      url: "http://52.14.22.20:3000/task/" + id + "/start"
+    };
+    this.started = true;
+    $http(takeTaskQuery).then(
+      function(res){
+        if (res.status === 200){
+          //alert("task taken successfully");
+          location.reload();
+        }
+      }
+    )
+  };
+
+  $scope.taskStopped = function(id){
+    //alert(id);
+    var takeTaskQuery = {
+      method: "post",
+      url: "http://52.14.22.20:3000/task/" + id + "/stop"
+    };
+    this.stopped = true;
+    $http(takeTaskQuery).then(
+      function(res){
+        if (res.status === 200){
+          //alert("task taken successfully");
+          location.reload();
+        }
+      }
+    )
+  };
   //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
 })
 
