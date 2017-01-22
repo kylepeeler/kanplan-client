@@ -1,7 +1,7 @@
 angular.module('kanplan.controllers', [])
 
 // Logging control //UserSession?
-  .controller('LoginCtrl', function ($scope, $http, $state, $stateParams, $ionicSideMenuDelegate,$rootScope, UserID, CurrentOrgId) {
+.controller('LoginCtrl', function ($scope, $http, $state, $stateParams, $ionicSideMenuDelegate,$rootScope, UserID, CurrentOrgId) {
     $scope.email = "";
     $scope.password = "";
     $scope.error = "";
@@ -103,8 +103,7 @@ angular.module('kanplan.controllers', [])
        }); */
     }
   })
-
-  .controller('SignUpCtrl', function ($scope, $http, $state) {
+.controller('SignUpCtrl', function ($scope, $http, $state) {
     $scope.user = {
       name: "",
       email: "",
@@ -251,7 +250,7 @@ angular.module('kanplan.controllers', [])
   //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
 })
 
-  .controller('ClosedTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
+.controller('ClosedTaskCtrl', function ($scope,$stateParams, $http, Tasks, CurrentOrgId) {
 
   var closedTaskQuery = {
     method: "get",
@@ -269,16 +268,13 @@ angular.module('kanplan.controllers', [])
   //$scope.tasks = Tasks.get(CurrentOrgId.get(), "Created");
 })
 
-
-
-
   .directive('task', function () {
     return { // custom DOM element for tast
       templateUrl: 'templates/task.html'
     };
   })
   // New Task template controller
-.controller('NewTaskCtrl', function ($scope, $ionicModal, UserID) {
+.controller('NewTaskCtrl', function ($scope, $ionicModal, $http, UserID, CurrentOrgId) {
     // TODO, finish the POST request to create a new task
     $scope.task = {
       title: "",
@@ -291,14 +287,30 @@ angular.module('kanplan.controllers', [])
       $scope.task.title = title;
       $scope.task.description = description;
       $scope.task.compensation = compensation;
+      $scope.task.author = UserID.get(),
       $scope.task.asignee = asignee;
-      _httpPostTask(task);
+      _httpPostTask($scope.task, CurrentOrgId.get());
     }
+
+
+     $ionicModal.fromTemplateUrl('templates/new.task.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function (modal) {
+        $scope.modal = modal;
+      });
+
+      $scope.openModal = function () {
+        $scope.modal.show();
+      };
+
+     
+
 
     function _httpPostTask(task, orgId) {
       var request = {
         method: "POST",
-        url: "http://52.14.22.20:3000/task/:{{orgId}}",
+        url: "http://52.14.22.20:3000/tasks/" + orgId,
         headers: {
           'content-type': 'application/json'
         },
@@ -306,7 +318,8 @@ angular.module('kanplan.controllers', [])
           title: $scope.task.title,
           description: $scope.task.description,
           compensation: $scope.task.compensation,
-          userId: $scope.task.asignee
+          author: $scope.task.author,
+          asignee: $scope.task.asignee
         }
       };
 
@@ -316,7 +329,7 @@ angular.module('kanplan.controllers', [])
             // if request is returned from server, then go to dashboard
             console.log("Post to user/signup");
             // $state.go('dashboard');
-            //close modal
+             $scope.modal.hide();
           }
         }
       );
