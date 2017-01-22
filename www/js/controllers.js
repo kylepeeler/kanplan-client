@@ -1,11 +1,18 @@
 angular.module('kanplan.controllers', [])
 
-// Loging control //UserSession?
-.controller('LoginCtrl', function($scope, $http, $state, $stateParams){
-  $scope.email;
-  $scope.password;
+// Logging control //UserSession?
+.controller('LoginCtrl', function($scope, $http, $state, $ionicSideMenuDelegate){
+  $scope.email = "";
+  $scope.password = "";
 
-  $scope.error;
+  $scope.error = "";
+
+  //disable side menu on login page
+  //$ionicSideMenuDelegate.canDragContent(false);
+  //enable side menu drag before moving to next view
+  $scope.$on('$ionicView.beforeLeave', function(event) {
+    //$ionicSideMenuDelegate.canDragContent(true);
+  });
 
   $scope.login = function(email,password, userId){
     var user = {
@@ -14,7 +21,7 @@ angular.module('kanplan.controllers', [])
       userId: userId
     };
     _httpPostLogin(user)
-  }
+  };
 
   function _httpPostLogin(user){
     var request = {
@@ -32,10 +39,10 @@ angular.module('kanplan.controllers', [])
 
     $http(request).then(
         function(res, err){
-           
+
             if(res.status === 200){
                 $state.go('dashboard');
-            } 
+            }
             // TODO impliment some error handeling
            //console.log(res);
             /*if(err){
@@ -75,7 +82,7 @@ angular.module('kanplan.controllers', [])
     $scope.user.email = email;
     $scope.user.password = password;
     _httpPostSignUp();
-  }
+  };
 
  function _httpPostSignUp(){
    var request = {
@@ -98,8 +105,8 @@ angular.module('kanplan.controllers', [])
                console.log("Post to user/signup");
                 $state.go('dashboard');
            }
-           
-          
+
+
        }
    );
      /*function(res){
@@ -112,28 +119,20 @@ angular.module('kanplan.controllers', [])
   }
  })
 
- .controller('DashboardCtrl', function($scope, $ionicPopup, $state){
-    /*var alertPopup = $ionicPopup.show({
-       title: 'You Messed Up',
-       templateUrl: 'templates/error.html',
-       buttons: [
-         {
-           text: 'Continue',
-           type: 'button-assertive',
-           onTap: function(e){
-             $state.go('login');
-           }
-         }
-       ]
-     }); */
-})
+ .controller('DashboardCtrl', function($scope, $ionicPopup, $state,  $ionicSideMenuDelegate){
+    //Enable side menu
+   $ionicSideMenuDelegate.canDragContent(true);
+   $scope.toggleLeft = function() {
+     $ionicSideMenuDelegate.toggleLeft();
+   };
+
+ })
 
 // -----------------------------------
 
 .controller('ErrorCtrl', function($scope, $ionicPopup, $state){
     var alertPopup = $ionicPopup.show({
        title: 'You Messed Up',
-       templateUrl: 'templates/error.html',
        buttons: [
          {
            text: 'Continue',
