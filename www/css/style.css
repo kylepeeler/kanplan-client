@@ -1,1 +1,12 @@
-/* Empty. Add your own CSS if you like */
+.card-cat {
+  margin-top: 50px;
+  margin-bottom: 0!important;
+}
+
+.platform-ios .card{
+  width: 280px;
+}
+
+.scroll-view{
+  height: 100vh;
+}

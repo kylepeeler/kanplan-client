@@ -37,14 +37,41 @@
   </head>
   <body ng-app="kanplan">
 
-    <ion-pane>
 
-      <ion-header-bar class="bar-stable">
-        <h1 class="title">KanPlan</h1>
+
+  <ion-side-menus>
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+      <ion-header-bar align-title="left" class="bar-stable">
+        <div class="title" style="text-align: center">Username?</div>
       </ion-header-bar>
-      
-      <ion-nav-view></ion-nav-view>
 
-    </ion-pane>
+      <ion-content>
+
+        <ion-list>
+          <ion-item nav-clear menu-close href="#">Task Board</ion-item>
+          <ion-item nav-clear menu-close href="#">Create Task</ion-item>
+          <ion-item nav-clear menu-close href="#">Invoices</ion-item>
+          <ion-item nav-clear menu-close href="#">Open Tasks</ion-item>
+          <ion-item nav-clear menu-close href="#">My Tasks</ion-item>
+          <ion-item nav-clear menu-close href="#">Organizations</ion-item>
+        </ion-list>
+
+      </ion-content>
+
+      <ion-footer-bar class="bar-light">
+
+        <button class="button button-full button-light" ng-click="console.log('logout')" style="margin-top: 0;margin-bottom: 0;">Logout</button>
+
+
+      </ion-footer-bar>
+    </ion-side-menu>
+
+    <ion-side-menu-content>
+      <ion-nav-view></ion-nav-view>
+    </ion-side-menu-content>
+  </ion-side-menus>
+
+
   </body>
 </html>
