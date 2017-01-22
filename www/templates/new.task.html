@@ -1,0 +1,22 @@
+<div class="list">
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Title</span>
+    <input type = "text" ng-model = "title"  name = "title" placeholder = "Title"/>
+  </label>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Description</span>
+    <input type = "text" ng-model = "description"  name = "description" placeholder = "Description"/>
+  </label>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Compensation</span>
+    <input type = "number" ng-model = "compensation"  name = "compensation" placeholder = "Compensation"/>
+  </label>
+
+   <label class="item item-input item-stacked-label">
+    <span class="input-label">Asignee</span>
+    <select ng-model="asignee" ng-options="x for x in asignees">
+    </select>
+  </label>
+</div>
