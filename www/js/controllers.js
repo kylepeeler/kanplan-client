@@ -63,6 +63,21 @@ angular.module('kanplan.controllers', [])
           console.log('test ' + errorCallback);
         }
       );
+
+      function getFirstUserOrg(user){
+      var request = {
+        method: "GET",
+        url: "http://52.14.22.20:3000/user/" + UserID.get()
+      };
+      $http(request).then(
+        function(successCallback, errorCallback){
+          if (successCallback.status === 200){
+            return successCallback.data.orgs[0];
+          }
+        }
+      )
+    };
+
       /*function(res){
        if(res.status === 200){
        UserSession.set("user",res.data);
@@ -176,7 +191,7 @@ angular.module('kanplan.controllers', [])
     function _httpPostTask(task, orgId) {
       var request = {
         method: "POST",
-        url: "http://52.14.22.20:3000/task/:{{orgId}}",
+        url: "http://52.14.22.20:3000/task/" + orgId ,
         headers: {
           'content-type': 'application/json'
         },
@@ -200,7 +215,7 @@ angular.module('kanplan.controllers', [])
       );
     }
   })
-  .controller('JoinOrgCtrl', function ($scope, $http, $ionicHistory, UserID) {
+.controller('JoinOrgCtrl', function ($scope, $http, $ionicHistory, UserID) {
     $scope.orgtojoin = {};
     var orgsReq = {
       method: "GET",
@@ -245,17 +260,17 @@ angular.module('kanplan.controllers', [])
       $ionicHistory.goBack();
     }
   })
-  .controller('InvoiceCtrl', function ($scope, $ionicModal, UserID) {
+.controller('InvoiceCtrl', function ($scope, $ionicModal, $http, UserID) {
 
   // TODO impilment GET request and populate list view will all the current invoices
 
   $scope.getInvoices = function () {
-    /*$scope.task.title = title;
-     $scope.task.description = description;
-     $scope.task.compensation = compensation;
-     $scope.task.asignee = asignee; */
+   
     console.log("query invoices");
-    //_httpPostTask(task);
+    
+     var invoices = [];
+
+    _httpGetInvoices(invoices, orgId);
     $scope.modal.show();
   };
 
@@ -272,14 +287,7 @@ angular.module('kanplan.controllers', [])
     $scope.modal.hide();
   };
 
-  $scope.createTask = function (title, description, compensation, asignee) {
-
-    var invoice = {}
-
-    _httpGetInvoices(invoices);
-    console.log("create task");
-    //$scope.modal.hide();
-  };
+ 
 
   // Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function () {
@@ -290,24 +298,16 @@ angular.module('kanplan.controllers', [])
   function _httpGetInvoices(task, orgId) {
     var request = {
       method: "GET",
-      url: "http://52.14.22.20:3000/tasks/" + orgId,
-      headers: {
-        'content-type': 'application/json'
-      },
-      data: {
-        title: $scope.task.title,
-        description: $scope.task.description,
-        compensation: $scope.task.compensation,
-        asignee: $scope.task.asignee,
-        userId: $scope.task.author
-      }
+      url: "http://52.14.22.20:3000/invoice/" + orgId
     };
 
     $http(request).then(
       function (res) {
         if (res.status === 200) {
           // if request is returned from server, then go to dashboard
-          console.log("Post to user/signup");
+          console.log("Invoices Loaded");
+          console.log(res);
+          $scope.invoices = res.data;
           // $state.go('dashboard');
           //close modal
         }
