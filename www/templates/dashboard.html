@@ -12,11 +12,19 @@
           Created
         </div>
       </div>
-      <div class="card">
+     <!-- <div class="card">
         <div class="item item-text-wrap">
           This is a basic Card which contains an item that has wrapping text.
         </div>
+      </div> -->
+      
+      <div ng-controller="TaskCtrl">
+        <div ng-repeat="task in tasks">
+            <div task></div>
+        </div>
+        
       </div>
+
     </div>
     <div class="col">
       <div class="card card-cat">

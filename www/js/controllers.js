@@ -1,7 +1,7 @@
 angular.module('kanplan.controllers', [])
 
 // Logging control //UserSession?
-.controller('LoginCtrl', function($scope, $http, $state, $stateParams, $ionicSideMenuDelegate){
+.controller('LoginCtrl', function($scope, $http, $state, $stateParams, $ionicSideMenuDelegate, UserID){
   $scope.email = "";
   $scope.password = "";
 
@@ -41,6 +41,8 @@ angular.module('kanplan.controllers', [])
         function(successCallback, errorCallback){
 
             if(successCallback.status === 200){
+                //store the UserID on login
+                UserID.set(user.userId);
                 $state.go('dashboard');
             }
 
@@ -124,12 +126,18 @@ angular.module('kanplan.controllers', [])
   }
  })
 
- .controller('DashboardCtrl', function($scope, $ionicPopup, $state,  $ionicSideMenuDelegate){
+.controller('DashboardCtrl', function($scope, $ionicPopup, $state, $stateParams, $ionicSideMenuDelegate, Tasks){
     //Enable side menu
    $ionicSideMenuDelegate.canDragContent(true);
    $scope.toggleLeft = function() {
      $ionicSideMenuDelegate.toggleLeft();
    };
+
+   // get the tasks from the backend based on the :orgId
+   //$stateProvider.state('org.task',{
+    // url: '/dashboard/:orgId',
+     
+  // });
 
  })
 
@@ -148,37 +156,16 @@ angular.module('kanplan.controllers', [])
          }
        ]
      });
-})// Task template controller
-.controller('TaskCtrl', function($scope){
-    $scope.task = {
-        $scope: orgId,
-        $scope: author,
-        $scope: assignee,
-        $scope: title,
-        $scope: state,
-        $scope: compensation,
-    }
+})// Task template factory
 
-    // function for time start / stop
-
-    // function for time stop
-
-    // for task delete button
-    function deleteTask(){
-
-    }
-
-
-    // for task submit button
-    function submitTask(){
-
-    }
-
-
+.directive('task', function() {
+  return { // custom DOM element for tast
+    templateUrl: 'templates/task.html'
+  };
 })
 
  // New Task template controller
-.controller('NewTaskCtrl', function($scope){
+.controller('NewTaskCtrl', function($scope, $ionicModal, UserID){
     //
     $scope.task = {
         title: "",
@@ -187,7 +174,9 @@ angular.module('kanplan.controllers', [])
         asignee : []
     };
 
-  $scope.createTask = function(title, description, compensation, asignee){
+
+
+  $scope.createTask = function(title, description, compensation, asignee ){
     $scope.task.title = title;
     $scope.task.description = description;
     $scope.task.compensation = compensation;
@@ -196,21 +185,57 @@ angular.module('kanplan.controllers', [])
   }
 
 
+$ionicModal.fromTemplateUrl('templates/new.task.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal){
+    $scope.modal = modal;
+  });
 
-    function _httpPostTask(task, orgId){
-        var request = {
-            method : "POST",
-            url: "http://52.14.22.20:3000/task/:{{orgId}}",
-            headers : {
-                'content-type' : 'application/json'
-                },
-            data : {
-                title: $scope.task.title,
-                description: $scope.task.description,
-                compensation: $scope.task.compensation,
-                userId: $scope.task.asignee
-            }
-        };
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.createTask = function(title, description, compensation, asignee){
+
+    var task = {
+      title: title,
+      description: description,
+      compensation: compensation,
+      author: user.userId,
+      asignee: asignee
+    }
+
+    _httpPostTask(task);
+    console.log("create task");
+    $scope.modal.hide();
+  }
+
+  // Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+
+function _httpPostTask(task, orgId){
+    var request = {
+        method : "POST",
+        url: "http://52.14.22.20:3000/tasks/" + orgId,
+        headers : {
+            'content-type' : 'application/json'
+            },
+        data : {
+            title: $scope.task.title,
+            description: $scope.task.description,
+            compensation: $scope.task.compensation,
+            asignee: $scope.task.asignee,
+            userId: $scope.task.author
+        }
+    };
 
         $http(request).then(
             function(res ){
