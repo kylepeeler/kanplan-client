@@ -10,10 +10,7 @@ angular.module('kanplan', ['ionic', 'kanplan.controllers', 'kanplan.services'])
   $stateProvider.state('login', {
     url :'/login',
     templateUrl: 'templates/login.html',
-    controller : 'LoginCtrl',
-    params:{
-      error: false
-    }
+    controller : 'LoginCtrl'
   })
   .state('signUp',{
     url:'/signUp',
@@ -25,8 +22,13 @@ angular.module('kanplan', ['ionic', 'kanplan.controllers', 'kanplan.services'])
     templateUrl:'templates/dashboard.html',
     controller: 'DashboardCtrl'
   })
+    .state('join-org', {
+      url: '/joinOrg',
+      templateUrl: 'templates/join-org.html',
+      controller: 'JoinOrgCtrl'
+    })
   .state('error',{
-    // need to define error route 
+    // need to define error route
     templateUrl:'templates/error.html',
     controller: 'ErrorCtrl'
   });
