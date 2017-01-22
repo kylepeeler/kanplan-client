@@ -8,10 +8,10 @@ angular.module('kanplan.controllers', [])
   $scope.error = "";
 
   //disable side menu on login page
-  //$ionicSideMenuDelegate.canDragContent(false);
+  $ionicSideMenuDelegate.canDragContent(false);
   //enable side menu drag before moving to next view
   $scope.$on('$ionicView.beforeLeave', function(event) {
-    //$ionicSideMenuDelegate.canDragContent(true);
+    $ionicSideMenuDelegate.canDragContent(true);
   });
 
   $scope.login = function(email,password, userId){
@@ -44,7 +44,7 @@ angular.module('kanplan.controllers', [])
                 $state.go('dashboard');
             }
 
-            // TODO impliment some error handeling
+            // TODO impliment some error handling
            //console.log(res);
             /*if(err){
                 // figure out best way to error handle
@@ -169,17 +169,17 @@ angular.module('kanplan.controllers', [])
     }
 
 
-    // for task submit button 
+    // for task submit button
     function submitTask(){
 
     }
 
 
 })
- 
+
  // New Task template controller
 .controller('NewTaskCtrl', function($scope){
-    // 
+    //
     $scope.task = {
         title: "",
         description: "",
@@ -195,7 +195,7 @@ angular.module('kanplan.controllers', [])
     _httpPostTask(task);
   }
 
-    
+
 
     function _httpPostTask(task, orgId){
         var request = {
