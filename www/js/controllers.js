@@ -122,6 +122,7 @@ angular.module('kanplan.controllers', [])
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
+    console.log(Tasks.get('SJJDsU-wg','Open'));
 
     // get the tasks from the backend based on the :orgId
     //$stateProvider.state('org.task',{
