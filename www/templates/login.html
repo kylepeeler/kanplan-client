@@ -1,8 +1,5 @@
 <ion-view view-title = "login">
-  <ion-header-bar class="bar-stable">
-    <h1 class="title">KanPlan</h1>
-  </ion-header-bar>
-  <div class="bar bar-subheader bar-dark">
+  <div class="bar bar-subheader bar-calm">
     <h1 class="title">Login</h1>
  </div>
  <div class="content has-subheader">
@@ -10,16 +7,18 @@
      <p>This is the error!</p>
  </div>
     <form name = "login-form">
-      Email: <br>
-      <label class = "item item-input">
-        <input type = "email" name = "email" ng-model = "email"><br>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Email: </span>
+        <input type = "email" name = "email" ng-model = "email" placeholder = "Email">
       </label>
-      Password:
-      <label class="item item-input">
-        <input type = "password" name = "password" ng-model = "password">
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Password: </span>
+        <input type = "password" name = "password" ng-model = "password" placeholder = "Password">
       </label>
-      <input type = "button" class="button button-block button-positive" value = "Login" ng-click="login(email,password)">
-      <a class="button button-block button-positive" href="#/signUp">Sign Up</a>
+      <div class="button-bar">
+        <a class="button button-block button-positive input-button" ng-click="login(email,password)">Login</a>
+        <a class="button button-block button-balanced input-button" href="#/signUp">Sign Up</a>
+      </div>
     </form>
   </div>
 </ion-view>

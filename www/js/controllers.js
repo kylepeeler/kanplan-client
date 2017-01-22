@@ -40,9 +40,10 @@ angular.module('kanplan.controllers', [])
     $http(request).then(
         function(res, err){
 
-            if(res.status === 200){
+            if(successCallback.status === 200){
                 $state.go('dashboard');
             }
+
             // TODO impliment some error handeling
            //console.log(res);
             /*if(err){
@@ -54,6 +55,10 @@ angular.module('kanplan.controllers', [])
                 $state.go('dashboard');
             } */
 
+        }, function(errorCallback) {
+            $scope.error = $stateParams.error;
+            $state.go('login', {error:true});
+            console.log('test ' + errorCallback);
         }
     );
       /*function(res){
@@ -143,4 +148,81 @@ angular.module('kanplan.controllers', [])
          }
        ]
      });
+})// Task template controller
+.controller('TaskCtrl', function($scope){
+    $scope.task = {
+        $scope: orgId,
+        $scope: author,
+        $scope: assignee,
+        $scope: title,
+        $scope: state,
+        $scope: compensation,
+    }
+
+    // function for time start / stop
+
+    // function for time stop
+
+    // for task delete button
+    function deleteTask(){
+
+    }
+
+
+    // for task submit button 
+    function submitTask(){
+
+    }
+
+
+})
+ 
+ // New Task template controller
+.controller('NewTaskCtrl', function($scope){
+    // 
+    $scope.task = {
+        title: "",
+        description: "",
+        compensation: "",
+        asignee : []
+    };
+
+  $scope.createTask = function(title, description, compensation, asignee){
+    $scope.task.title = title;
+    $scope.task.description = description;
+    $scope.task.compensation = compensation;
+    $scope.task.asignee = asignee;
+    _httpPostTask(task);
+  }
+
+    
+
+    function _httpPostTask(task, orgId){
+        var request = {
+            method : "POST",
+            url: "http://52.14.22.20:3000/task/:{{orgId}}",
+            headers : {
+                'content-type' : 'application/json'
+                },
+            data : {
+                title: $scope.task.title,
+                description: $scope.task.description,
+                compensation: $scope.task.compensation,
+                userId: $scope.task.asignee
+            }
+        };
+
+        $http(request).then(
+            function(res ){
+                if(res.status === 200){
+                    // if request is returned from server, then go to dashboard
+                    console.log("Post to user/signup");
+                       // $state.go('dashboard');
+                       //close modal
+                }
+            }
+        );
+    }
 });
+
+

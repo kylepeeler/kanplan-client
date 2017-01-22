@@ -10,3 +10,11 @@
 .scroll-view{
   height: 100vh;
 }
+
+.input-button{
+    margin: 12px;
+}
+
+.input-field{
+    padding: 5px;
+}

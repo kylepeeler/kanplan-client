@@ -1,19 +1,24 @@
 <ion-view view-title = "signUp">
- <div class="bar bar-subheader bar-dark">
+ <div class="bar bar-subheader bar-calm">
     <h1 class="title">Sign Up</h1>
  </div>
  <div class = "content has-subheader">
    <div class = "list">
-     <label class = "item item-input">
+     <label class="item item-input item-stacked-label">
+        <span class="input-label">Name: </span>
        <input type = "text" ng-model = "name"  name = "name" placeholder = "Name"/>
      </label>
-     <label class = "item item-input">
+     <label class="item item-input item-stacked-label">
+        <span class="input-label">Email: </span>
        <input type = "email" ng-model = "email"  name = "email" placeholder = "Email"/>
      </label>
-     <label class = "item item-input">
+     <label class="item item-input item-stacked-label">
+        <span class="input-label">Password: </span>
        <input type = "password" ng-model = "password"  name = "password" placeholder = "Password"/>
      </label>
-    <a class="button button-block button-positive" href="#/login">Login</a>
-    <input type = "button"  class="button button-block button-positive" value = "Sign Up" ng-click="signUp(name,email,password)">
+     <div class="button-bar">
+       <a class="button button-block icon-left ion-chevron-left input-button button-dark" href="#/login">Back</a>
+      <a class="button button-block button-balanced input-button" ng-click="signUp(name,email,password)">Sign Up</a>
+     </div>
   </div>
 </ion-view>
