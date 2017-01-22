@@ -148,14 +148,16 @@ angular.module('kanplan.controllers', [])
       ]
     });
   })// Task template factory
-
-  .directive('task', function () {
+.controller('TaskCtrl', function ($scope, Tasks) {
+    
+})
+.directive('task', function () {
     return { // custom DOM element for tast
       templateUrl: 'templates/task.html'
     };
   })
   // New Task template controller
-  .controller('NewTaskCtrl', function ($scope, $ionicModal, UserID) {
+.controller('NewTaskCtrl', function ($scope, $ionicModal, UserID) {
     // TODO, finish the POST request to create a new task
     $scope.task = {
       title: "",

@@ -1,24 +1,25 @@
-<div class="card">
+<div class="card" ng-contoller="TaskCtrl">
     <!-- The title will be in the header of the card --> 
     <div class="item item-divider">
-        <h1>{{task.title}}</h1>
+        <h3>{{task.title}}</h3>
     </div>
 
     <!-- the description is word wrapped -->
     <div class="item item-text-wrap">{{task.description}}</div>
    
-    <p>${{task.compensation}}</p>
+    <p>${{task.compensation}} per hour</p>
 
     <!-- Buttons to perform Delete and Submit operations -->
+
+    <div class="button-bar">
+        <a class="button button-block  input-button button-balanced"  ng-click="timerStart()">Start</a>
+        <a class="button button-block  input-button button-assertive" ng-click="timerStop()">Stop</a>
+    </div>
+
     <div class="item item-divider">
-        <ion-option-button class="button button-small button-assertive" ng-click="deleteTask(item)">
-        Delete
+        <ion-option-button class="button button-small button-royal" ng-click="submitTask(taskId)">
+        Complete
         </ion-option-button>
-
-        <ion-option-button class="button button-small button-royal" ng-click="submitTask(item)">
-        Submit
-        </ion-option-button>
-
     </div>
     
 </div>
