@@ -3,17 +3,14 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('kanplan', ['ionic', 'kanplan.controllers'])
+angular.module('kanplan', ['ionic', 'kanplan.controllers', 'kanplan.services'])
 
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider.state('login', {
     url :'/login',
     templateUrl: 'templates/login.html',
-    controller : 'LoginCtrl',
-    params:{
-      error: false
-    }
+    controller : 'LoginCtrl'
   })
   .state('signUp',{
     url:'/signUp',
@@ -25,8 +22,13 @@ angular.module('kanplan', ['ionic', 'kanplan.controllers'])
     templateUrl:'templates/dashboard.html',
     controller: 'DashboardCtrl'
   })
+    .state('join-org', {
+      url: '/joinOrg',
+      templateUrl: 'templates/join-org.html',
+      controller: 'JoinOrgCtrl'
+    })
   .state('error',{
-    // need to define error route 
+    // need to define error route
     templateUrl:'templates/error.html',
     controller: 'ErrorCtrl'
   });

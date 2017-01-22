@@ -31,11 +31,22 @@
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
-     <script src="js/controllers.js"></script>
-    <!--<script src="js/services.js"></script> -->
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
 
   </head>
   <body ng-app="kanplan">
+
+<script id="my-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">My Modal title</h1>
+    </ion-header-bar>
+    <ion-content>
+      Hello!
+    </ion-content>
+  </ion-modal-view>
+</script>
 
 
 
@@ -49,12 +60,17 @@
       <ion-content>
 
         <ion-list>
-          <ion-item nav-clear menu-close href="#">Task Board</ion-item>
-          <ion-item nav-clear menu-close href="#">Create Task</ion-item>
-          <ion-item nav-clear menu-close href="#">Invoices</ion-item>
-          <ion-item nav-clear menu-close href="#">Open Tasks</ion-item>
-          <ion-item nav-clear menu-close href="#">My Tasks</ion-item>
-          <ion-item nav-clear menu-close href="#">Organizations</ion-item>
+          <ion-item nav-clear menu-close href="">Task Board</ion-item>
+          <div ng-controller="NewTaskCtrl">
+            <ion-item nav-clear menu-close  ng-click = "openModal()">Create Task</ion-item>
+          </div>
+          <div ng-controller="InvoiceCtrl">
+            <ion-item nav-clear menu-close ng-click = "getInvoices()">Invoices</ion-item>
+          </div>
+
+          <ion-item nav-clear menu-close href="">Open Tasks</ion-item>
+          <ion-item nav-clear menu-close href="">My Tasks</ion-item>
+          <ion-item nav-clear menu-close href="">Organizations</ion-item>
         </ion-list>
 
       </ion-content>
